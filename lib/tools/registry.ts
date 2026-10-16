@@ -62,9 +62,16 @@ export type ToolId = (typeof toolRegistry)[number]["id"];
 
 const allTools: readonly ToolDefinition[] = toolRegistry;
 
-/** Tools that should be visible to users (excludes `planned`). */
+const HIDDEN_TOOL_IDS: ReadonlySet<ToolId> = new Set([
+  "link-checker",
+  "call-center-script-editor",
+]);
+
+/** Tools that should be visible to users (excludes `planned` and hidden tools). */
 export function getVisibleTools(): readonly ToolDefinition[] {
-  return allTools.filter((tool) => tool.status !== "planned");
+  return allTools.filter(
+    (tool) => tool.status !== "planned" && !HIDDEN_TOOL_IDS.has(tool.id as ToolId),
+  );
 }
 
 export function getTool(id: ToolId): ToolDefinition {

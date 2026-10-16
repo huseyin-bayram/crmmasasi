@@ -8,7 +8,6 @@ import { appConfig } from "@/lib/app-config";
 import { getToolGroups } from "@/lib/tools/navigation";
 import { cn } from "@/lib/cn";
 import { ToolIcon } from "@/components/tools/tool-icon";
-import { BrandLogo } from "@/components/navigation/brand";
 
 interface NavItemProps {
   href: string;
@@ -39,6 +38,9 @@ function NavItem({ href, label, icon, active, onNavigate }: NavItemProps) {
   );
 }
 
+const SHOW_WORKSPACE_NAV = false;
+const SHOW_ONGOING_REALTIME_NAV = false;
+
 /**
  * Sidebar navigation including ÇALIŞMA ALANI and Tool Registry.
  */
@@ -51,56 +53,60 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
     <nav aria-label="Ana menü" className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 overflow-y-auto px-2 py-3">
         {/* ÇALIŞMA ALANI */}
-        <div className="mb-5">
-          <h2
-            id="nav-group-workspace"
-            className="px-2.5 pb-1.5 text-[11px] font-semibold tracking-[0.06em] text-ink-subtle uppercase"
-          >
-            Çalışma Alanı
-          </h2>
-          <ul aria-labelledby="nav-group-workspace" className="space-y-px">
-            <NavItem
-              href="/workspace/my-work"
-              label="Benim İşlerim"
-              icon={<CheckSquare aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
-              active={pathname === "/workspace/my-work"}
-              onNavigate={onNavigate}
-            />
-            <NavItem
-              href="/workspace/daily-brief"
-              label="Günlük Toplantı Takip"
-              icon={<CalendarCheck aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
-              active={pathname === "/workspace/daily-brief"}
-              onNavigate={onNavigate}
-            />
-            <NavItem
-              href="/workspace"
-              label="Genel Bakış"
-              icon={<FolderKanban aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
-              active={pathname === "/workspace"}
-              onNavigate={onNavigate}
-            />
-          </ul>
-        </div>
+        {SHOW_WORKSPACE_NAV && (
+          <div className="mb-5">
+            <h2
+              id="nav-group-workspace"
+              className="px-2.5 pb-1.5 text-[11px] font-semibold tracking-[0.06em] text-ink-subtle uppercase"
+            >
+              Çalışma Alanı
+            </h2>
+            <ul aria-labelledby="nav-group-workspace" className="space-y-px">
+              <NavItem
+                href="/workspace/my-work"
+                label="Benim İşlerim"
+                icon={<CheckSquare aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
+                active={pathname === "/workspace/my-work"}
+                onNavigate={onNavigate}
+              />
+              <NavItem
+                href="/workspace/daily-brief"
+                label="Günlük Toplantı Takip"
+                icon={<CalendarCheck aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
+                active={pathname === "/workspace/daily-brief"}
+                onNavigate={onNavigate}
+              />
+              <NavItem
+                href="/workspace"
+                label="Genel Bakış"
+                icon={<FolderKanban aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
+                active={pathname === "/workspace"}
+                onNavigate={onNavigate}
+              />
+            </ul>
+          </div>
+        )}
 
         {/* ONGOING & REALTIME */}
-        <div className="mb-5">
-          <h2
-            id="nav-group-ongoing-realtime"
-            className="px-2.5 pb-1.5 text-[11px] font-semibold tracking-[0.06em] text-ink-subtle uppercase"
-          >
-            Ongoing &amp; Real-time
-          </h2>
-          <ul aria-labelledby="nav-group-ongoing-realtime" className="space-y-px">
-            <NavItem
-              href="/ongoing-realtime"
-              label="Senaryo Yönetimi"
-              icon={<Zap aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
-              active={pathname === "/ongoing-realtime" || pathname.startsWith("/ongoing-realtime/")}
-              onNavigate={onNavigate}
-            />
-          </ul>
-        </div>
+        {SHOW_ONGOING_REALTIME_NAV && (
+          <div className="mb-5">
+            <h2
+              id="nav-group-ongoing-realtime"
+              className="px-2.5 pb-1.5 text-[11px] font-semibold tracking-[0.06em] text-ink-subtle uppercase"
+            >
+              Ongoing &amp; Real-time
+            </h2>
+            <ul aria-labelledby="nav-group-ongoing-realtime" className="space-y-px">
+              <NavItem
+                href="/ongoing-realtime"
+                label="Senaryo Yönetimi"
+                icon={<Zap aria-hidden="true" className={iconClass} strokeWidth={1.75} />}
+                active={pathname === "/ongoing-realtime" || pathname.startsWith("/ongoing-realtime/")}
+                onNavigate={onNavigate}
+              />
+            </ul>
+          </div>
+        )}
 
         {/* ARAÇLAR */}
         <div>
@@ -156,7 +162,6 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           />
         </ul>
         <div className="mt-3 pt-3 border-t border-line/60 px-2 flex flex-col items-start text-left gap-1.5">
-          <BrandLogo className="h-7 w-auto object-contain" />
           <p className="text-[11px] text-ink-subtle">
             {appConfig.name} {appConfig.displayVersion}
           </p>

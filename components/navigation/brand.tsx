@@ -35,12 +35,12 @@ export function CrmLogo({ className, priority = false }: { className?: string; p
   );
 }
 
-/** Sidebar header: CRM Masa logo, links to workspace. */
+/** Sidebar header: CRM Masa logo, links to tools home while workspace is hidden. */
 export function SidebarBrand() {
   return (
     <div className="shrink-0 border-b border-line px-3 py-3 bg-canvas flex items-center justify-center">
       <Link
-        href="/workspace"
+        href={appConfig.basePath}
         className="block text-center rounded-sm transition-opacity hover:opacity-90"
         aria-label="CRM Masa"
       >

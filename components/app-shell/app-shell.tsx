@@ -53,7 +53,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           >
             <Menu aria-hidden="true" className="size-5" />
           </button>
-          <Link href="/workspace" className="flex items-center gap-2">
+          <Link href={appConfig.basePath} className="flex items-center gap-2">
             <CrmLogo className="size-8 object-contain" />
             <span className="text-sm font-bold tracking-tight text-ink">CRM Masa</span>
           </Link>
@@ -75,7 +75,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="flex h-full flex-col">
           <div className="relative border-b border-line">
             <div className="p-3 pr-10 flex items-center justify-center">
-              <Link href="/workspace" onClick={closeMenu} className="block text-center">
+              <Link href={appConfig.basePath} onClick={closeMenu} className="block text-center">
                 <CrmLogo priority className="w-[140px] max-w-full h-auto mx-auto" />
               </Link>
             </div>
