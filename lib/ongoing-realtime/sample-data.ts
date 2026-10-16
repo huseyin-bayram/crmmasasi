@@ -1,0 +1,286 @@
+import * as XLSX from "xlsx";
+
+/**
+ * Embedded realistic sample workbook for one-click testing of the
+ * Ongoing & Real-time workspace without needing to upload an external file.
+ */
+export function generateSampleOngoingRealtimeWorkbook(): Uint8Array {
+  const scenariosData = [
+    [
+      "SCENARIO TYPE",
+      "SCENARIO NAME",
+      "STATUS",
+      "SCENARIO COVERAGE / CAMPAIGN NAME",
+      "START DATE",
+      "END DATE",
+      "SEGMENT / REAL-TIME EVENT",
+      "PERIOD",
+      "EXECUTION TIME",
+      "PRODUCT",
+      "BURN",
+      "İş Birimi",
+      "Açıklama",
+    ],
+    // 1. Ongoing - Deployed - Daily - Asistanlık
+    [
+      "Ongoing",
+      "ASISTANLIK_30438_V4",
+      "Deployed",
+      "Ayrıcalıklar - Asistanlık-30438 - V4",
+      "01.01.2026",
+      "31.12.2026",
+      "YENI_ALA_SEGMENTINE_GECENLER",
+      "Daily",
+      "Every 09:07",
+      "Kredi Kartı",
+      "-",
+      "Yabancı Ve Ala Bankacılığı Segment Yönetimi Servisi",
+      "Âlâ müşterilerine asistanlık hizmeti bilgilendirmesi",
+    ],
+    // 2. Ongoing - Deployed - Daily - Otopark (Shares same audience cluster)
+    [
+      "Ongoing",
+      "OTOPARK_30341_V4",
+      "Deployed",
+      "Ayrıcalıklar - Otopark-30341 - V4",
+      "01.01.2026",
+      "31.12.2026",
+      "YENI_ALA_SEGMENTINE_GECENLER",
+      "Daily",
+      "Every 09:07",
+      "Kredi Kartı",
+      "-",
+      "Yabancı Ve Ala Bankacılığı Segment Yönetimi Servisi",
+      "Havalimanı ve AVM otopark indirimi",
+    ],
+    // 3. Ongoing - Deployed - Daily - Restoran (Shares same audience cluster)
+    [
+      "Ongoing",
+      "RESTORANN_30434_V5",
+      "Deployed",
+      "Ayrıcalıklar - Restoran-30434 - V5",
+      "01.01.2026",
+      "31.12.2026",
+      "YENI_ALA_SEGMENTINE_GECENLER",
+      "Daily",
+      "Every 09:07",
+      "Kredi Kartı",
+      "-",
+      "Yabancı Ve Ala Bankacılığı Segment Yönetimi Servisi",
+      "Restoran harcamalarına özel %10 indirim",
+    ],
+    // 4. Real-time - Deployed - TamamlanmisApp
+    [
+      "Real-time",
+      "GunlukHesap_CC_ONG_49797",
+      "Deployed",
+      "Yeni Müşteri Günlük Hesap Hoş Geldin-49797",
+      "15.02.2026",
+      "31.12.2026",
+      "TamamlanmisApp",
+      "Other",
+      "Real-time",
+      "Mevduat",
+      "-",
+      "Mevduat Ürün Yönetimi Servisi",
+      "Mobil uygulama açılışı tamamlandığında tetiklenir",
+    ],
+    // 5. Real-time - Deployed - MallIQEvent (Geolocation)
+    [
+      "Real-time",
+      "MALLIQ_CEVAHIR_AVM_48102",
+      "Deployed",
+      "AVM Harcama Fırsatı Cevahir-48102",
+      "01.03.2026",
+      "31.12.2026",
+      "MallIQEvent",
+      "Other",
+      "Real-time",
+      "Kredi Kartı",
+      "BURN_MALLIQ_AVM_GENEL",
+      "Kartlı Ödeme Sistemleri Servisi",
+      "Cevahir AVM çevresine giren kart müşterilerine push bildirimi",
+    ],
+    // 6. Real-time - Deployed - mobilUygulamaGiris
+    [
+      "Real-time",
+      "MOBIL_GIRIS_FINANSMAN_TEKLIF_49201",
+      "Deployed",
+      "Mobil Giriş Özel İhtiyaç Finansmanı-49201 - V2",
+      "01.02.2026",
+      "31.12.2026",
+      "mobilUygulamaGiris",
+      "Other",
+      "Real-time",
+      "Tüketici Finansmanı",
+      "-",
+      "Perakende Kredi ve Finansman Servisi",
+      "Müşteri mobil şubeye giriş yaptığında ön onaylı finansman teklifi",
+    ],
+    // 7. Real-time - Deployed - IvrLogin
+    [
+      "Real-time",
+      "IVR_LOGIN_KART_SIFRE_38920",
+      "Deployed",
+      "IVR Giriş Şifre Yenileme Hatırlatması-38920",
+      "10.01.2026",
+      "31.12.2026",
+      "IvrLogin",
+      "Other",
+      "Real-time",
+      "Dijital Kanallar",
+      "-",
+      "Alternatif Dağıtım Kanalları Servisi",
+      "Müşteri iletişim merkezini aradığında tetiklenir",
+    ],
+    // 8. Ongoing - Active but Undeployed (REVIEW case)
+    [
+      "Ongoing",
+      "FAST_TRACK_30364_ONG",
+      "Undeployed",
+      "Ayrıcalıklar - FAST TRACK -30364 ONG",
+      "01.01.2026",
+      "31.12.2026",
+      "ALA_PRIVATE_AYRICALIKLAR_MBL",
+      "Passive Audience",
+      "-",
+      "Kredi Kartı",
+      "-",
+      "Yabancı Ve Ala Bankacılığı Segment Yönetimi Servisi",
+      "Tasarım onayı bekleniyor",
+    ],
+    // 9. Ongoing - Expired but Deployed (CRITICAL case)
+    [
+      "Ongoing",
+      "ESKI_YILBASI_KAMPANYASI_29100",
+      "Deployed",
+      "2025 Yılbaşı Alışveriş Kampanyası-29100",
+      "01.12.2025",
+      "15.01.2026",
+      "KREDI_KARTI_AKTIF_KULLANICILAR",
+      "Weekly",
+      "Every 10:00",
+      "Kredi Kartı",
+      "-",
+      "Kartlı Ödeme Sistemleri Servisi",
+      "Süresi doldu ancak sistemde kapatılmamış",
+    ],
+    // 10. Ongoing - Feeder dependency case
+    [
+      "Ongoing",
+      "TASIT_FINANSMAN_TAKIP_44102",
+      "Deployed",
+      "Taşıt Finansmanı Takip Kampanyası-44102 - V3",
+      "01.03.2026",
+      "31.12.2026",
+      "TASIT_BASVURU_LISTESI",
+      "Daily",
+      "Every 14:00",
+      "Taşıt Finansmanı",
+      "-",
+      "Taşıt ve Konut Finansmanı Servisi",
+      "HF_TASIT_ONB_2026 -> Hedef kitle buradan besleniyor",
+    ],
+    // 11. Onboarding upstream scenario (for dependency resolution)
+    [
+      "Onboarding",
+      "HF_TASIT_ONB_2026",
+      "Deployed",
+      "Taşıt Kredisi Başlangıç Onboarding Akışı",
+      "01.01.2026",
+      "31.12.2028",
+      "YENI_TASIT_MUSTERILERI",
+      "Daily",
+      "Every 08:30",
+      "Taşıt Finansmanı",
+      "-",
+      "Taşıt ve Konut Finansmanı Servisi",
+      "Taşıt başvurusu yapan müşterilerin başlangıç havuzu",
+    ],
+    // 12. Real-time - FinansmanTaksitOdemesi
+    [
+      "Real-time",
+      "TAKSIT_ODENDI_TEBRIK_49810",
+      "Deployed",
+      "Taksit Ödeme Başarılı Bildirimi-49810",
+      "01.01.2026",
+      "31.12.2026",
+      "FinansmanTaksitOdemesi",
+      "Other",
+      "Real-time",
+      "Tüketici Finansmanı",
+      "-",
+      "Perakende Kredi ve Finansman Servisi",
+      "Finansman taksiti ödendiğinde gönderilen tebrik ve limit bildirimi",
+    ],
+    // 13. Ongoing - Missing Product (REVIEW case)
+    [
+      "Ongoing",
+      "GENEL_DUYURU_SCENARIO_50100",
+      "Deployed",
+      "Mobil Uygulama Güncelleme Duyurusu-50100",
+      "01.04.2026",
+      "31.12.2026",
+      "TUM_MOBIL_KULLANICILAR",
+      "Monthly",
+      "Every 11:30",
+      "", // Missing product
+      "-",
+      "Alternatif Dağıtım Kanalları Servisi",
+      "Ürün bilgisi tanımlanmamış operasyonel duyuru",
+    ],
+    // 14. Real-time - Missing Event (REVIEW case)
+    [
+      "Real-time",
+      "RT_EKSIK_EVENTLI_SENARYO_51200",
+      "Undeployed",
+      "Tetikleyici Bekleyen Akış-51200",
+      "01.05.2026",
+      "31.12.2026",
+      "", // Missing event
+      "Other",
+      "Real-time",
+      "Mevduat",
+      "-",
+      "Mevduat Ürün Yönetimi Servisi",
+      "Tetikleyici event mimari ekipten bekleniyor",
+    ],
+    // 15. Ongoing - Expiring in 20 days (PLANNING case)
+    [
+      "Ongoing",
+      "BAHAR_KAMPANYASI_BITEN_48300",
+      "Deployed",
+      "Bahar Nakit Avans Kampanyası-48300",
+      "01.03.2026",
+      "03.11.2026",
+      "NAKIT_AVANS_HEDEF_KITLE",
+      "Weekly",
+      "Every 15:00",
+      "Kredi Kartı",
+      "-",
+      "Kartlı Ödeme Sistemleri Servisi",
+      "Yenileme onayı hazırlanıyor",
+    ],
+  ];
+
+  const calendarData = [
+    ["Tarih", "Scenario Name", "Tetiklenme Saati / Tipi"],
+    ["14.10.2026", "ASISTANLIK_30438_V4", "Every 09:07"],
+    ["14.10.2026", "OTOPARK_30341_V4", "Every 09:07"],
+    ["14.10.2026", "RESTORANN_30434_V5", "Every 09:07"],
+    ["14.10.2026", "TASIT_FINANSMAN_TAKIP_44102", "Every 14:00"],
+    ["14.10.2026", "BAHAR_KAMPANYASI_BITEN_48300", "Every 15:00"],
+    ["15.10.2026", "ASISTANLIK_30438_V4", "Every 09:07"],
+    ["15.10.2026", "OTOPARK_30341_V4", "Every 09:07"],
+  ];
+
+  const wb = XLSX.utils.book_new();
+  const scenariosWs = XLSX.utils.aoa_to_sheet(scenariosData);
+  const calendarWs = XLSX.utils.aoa_to_sheet(calendarData);
+
+  XLSX.utils.book_append_sheet(wb, scenariosWs, "SCENARIOS");
+  XLSX.utils.book_append_sheet(wb, calendarWs, "CALENDAR");
+
+  const buf = XLSX.write(wb, { type: "array", bookType: "xlsx" });
+  return new Uint8Array(buf);
+}

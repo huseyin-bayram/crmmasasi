@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/*
+ * CRM Tools — design tokens
+ *
+ * Deliberately small. Neutrals carry the structure, the Türkiye Finans
+ * turquoise is used only for accents (active nav, selected state, logo).
+ * Text-on-brand surfaces use the darker brand-700, because the logo
+ * turquoise (#00C4B3) does not reach WCAG AA contrast with white text.
+ */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* 13px UI text — the workhorse size for labels, tables, pane headers */
+  --text-ui: 0.8125rem;
+  --text-ui--line-height: 1.25rem;
+
+  /* Neutrals */
+  --color-canvas: #f5f6f7;
+  --color-surface: #ffffff;
+  --color-surface-muted: #fafbfb;
+  --color-line: #e1e4e8;
+  --color-line-strong: #c9cfd5;
+  --color-ink: #161a1f;
+  --color-ink-muted: #4c5662;
+  --color-ink-subtle: #67717c;
+
+  /* Brand */
+  --color-brand: #00c4b3;
+  --color-brand-50: #e8f8f6;
+  --color-brand-100: #ccefeb;
+  --color-brand-700: #007a70;
+  --color-brand-800: #00645c;
+  --color-brand-900: #004b45;
+
+  /* Semantic status — always paired with an icon and text */
+  --color-success: #1a7f37;
+  --color-success-bg: #edf7f0;
+  --color-success-line: #b8dfc3;
+  --color-warning: #8a5300;
+  --color-warning-bg: #fff7e2;
+  --color-warning-line: #efd391;
+  --color-danger: #b42318;
+  --color-danger-bg: #fdf1f0;
+  --color-danger-line: #f1c0bb;
+  --color-info: #0b5cad;
+  --color-info-bg: #eef4fc;
+  --color-info-line: #bfd5f0;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-feature-settings: "tnum" 0;
+  }
+
+  /* One consistent, clearly visible focus indicator across the product */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-700);
+    outline-offset: 2px;
+  }
+
+  textarea:focus-visible {
+    outline-offset: -2px;
+  }
+
+  ::selection {
+    background: var(--color-brand-100);
+    color: var(--color-ink);
+  }
+
+  ::placeholder {
+    color: var(--color-ink-subtle);
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
